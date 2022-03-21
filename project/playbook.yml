@@ -1,0 +1,9 @@
+- name: Doorbell
+  hosts: "{{ target | default('all')}}"
+  gather_facts: no
+  vars:
+    ansible_connection: aws_ssm
+    ansible_aws_ssm_bucket_name: aws_required_bucket_name
+  tasks:
+    - name: Ring the doorbell
+      ping:
