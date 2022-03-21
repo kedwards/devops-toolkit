@@ -5,15 +5,15 @@ ENV ANSIBLE_VERSION ${ANSIBLE_VERSION_ARG}
 
 # Labels.
 LABEL com.withreach.reach-devops.revision=$GIT_COMMIT \
-  ca.kevinedwards.ansible.build-date=$BUILD_DATE \
-  ca.kevinedwards.ansible.vcs-ref=$SOURCE \
-  ca.kevinedwards.ansible.version=$VERSION \
-  ca.kevinedwards.ansible.name="kevinedwards/ansible" \
-  ca.kevinedwards.ansible.description="Dockerized Ansible + Mitogen + AWS Session Manager" \
-  ca.kevinedwards.ansible.vcf-url="https://github.com/kevinedwards/ansible" \
-  ca.kevinedwards.ansible.vendor="LivITy Ltd." \
-  ca.kevinedwards.ansible.authors="Kevin Edwards <kedwards@kevinedwards.ca>" \
-  ca.kevinedwards.ansible.docker.cmd="docker run -it --rm -e 'AWS_PROFILE=profile' -v \$(pwd):/ansible ~/.aws/credentials:/root/.aws/credentials ~/.ssh/_id_rsa.pem:/root/id_rsa ansible"
+  ca.kevinedwards.devops-toolkit.build-date=$BUILD_DATE \
+  ca.kevinedwards.devops-toolkit.vcs-ref=$SOURCE \
+  ca.kevinedwards.devops-toolkit.version=$VERSION \
+  ca.kevinedwards.devops-toolkit.name="kevinedwards/devops-toolkit" \
+  ca.kevinedwards.devops-toolkit.description="DevOps toolkit" \
+  ca.kevinedwards.devops-toolkit.vcf-url="https://github.com/kevinedwards/devops-toolkit" \
+  ca.kevinedwards.devops-toolkit.vendor="LivITy Ltd." \
+  ca.kevinedwards.devops-toolkit.authors="Kevin Edwards <kedwards@kevinedwards.ca>" \
+  ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm kevinedwards/devops-toolkit:latest"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
   apt-get install --no-install-recommends -y unzip rsync sudo curl gnupg2 python3-pip sshpass git openssh-client && \

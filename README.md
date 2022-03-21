@@ -1,4 +1,6 @@
-# Docker + Ansible + Mitogen + Ansible Runner + AWS SSM Manager
+# DevOps Toolkit
+
+**Docker + Ansible + Mitogen + Ansible Runner + AWS SSM Manager**
 
 Ansible and friends inside Docker for consistent running of ansible inside your local machine or CI/CD system.
 
@@ -22,7 +24,7 @@ To leverage *Mitogen- to accelerate your playbook runs, add this to your ```ansi
 Please investigate in your container the location of `ansible_mitogen` (it is different per container). You can do this via:
 
 ```bash
-$(docker run --rm -it ansible:v1 /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
+$(docker run --rm -it kevinedwards/devops-toolkit /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
 ```
 
 and then configuring your own ansible.cfg like:
@@ -31,7 +33,7 @@ and then configuring your own ansible.cfg like:
 ```bash
 echo "
 [defaults]
-strategy_plugins = $(docker run --rm -it ansible:v1 /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
+strategy_plugins = $(docker run --rm -it kevinedwards/devops-toolkit /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
 strategy = mitogen_linear
 "
 ```
@@ -51,7 +53,7 @@ strategy = mitogen_linear
 ### Simple
 
 ```bash
-docker run --rm -it ansible:v1
+docker run --rm -it kevinedwards/devops-toolkit
 ```
 
 no parameters, will run ansible-playbook --version
@@ -76,7 +78,7 @@ ansible-playbook [core 2.12.2]
   -v $(pwd):/ansible \
   ~/.aws:/root/.aws \
   -v ~/.ssh/id_rsa:/root/id_rsa \
-  ansible:v1 \
+  kevinedwards/devops-toolkit \
     ansible-playbook project/playbook.yml \
       -e 'AWS_PROFILE=profile' \
       -K \
@@ -95,7 +97,7 @@ Find out more [here](https://ansible-runner.readthedocs.io/en/stable/)
   -v $(pwd):/ansible \
   ~/.aws:/root/.aws \
   -v ~/.ssh/id_rsa:/root/id_rsa \
-  ansible:v1 \
+  kevinedwards/devops-toolkit \
     ansible-runner run /ansible -p playbook.yml
  ```
 
@@ -104,7 +106,7 @@ Find out more [here](https://ansible-runner.readthedocs.io/en/stable/)
 You can create aliases to ease your typing burden when using:
 
 ```bash
-alias docker-ansible-cli='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible ansible:v1 bash'
+alias docker-ansible-cli='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible kevinedwards/devops-toolkit bash'
 
-alias docker-ansible-cmd='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible ansible:v1 '
+alias docker-ansible-cmd='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible kevinedwards/devops-toolkit '
 ```
