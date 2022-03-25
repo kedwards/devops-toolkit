@@ -17,7 +17,7 @@ jobs:
   tester:
     runs-on: ubuntu-latest
     outputs:
-      a1804: ${{ steps.test1804.outputs.test1804}}
+      a1804: ${{ steps.test_ubuntu_base_1804.outputs.ubuntu_base_1804}}
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
               - 'src/ansible-core/ubuntu20.04/**'
 
       - name: Ubuntu 18.04 Base Test
-        id: test_base_1804
+        id: test_ubuntu_base_1804
         if: steps.filter.outputs.ubuntu_base_1804 == 'true'
         run: |
             echo ::set-output name=ubuntu_base_1804::true
@@ -56,12 +56,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Ubuntu 18.04 Builder
-        if: needs.tester.changes.outputs.ubuntu_base_1804 == 'true'
+        if: needs.tester.outputs.ubuntu_base_1804 == 'true'
         uses: docker/build-push-action@v2.8.0
         with:
           context:  "{{defaultContext}}:src/ansible/ubuntu18.04"
           push: true
-          tags: kevinedwards/devops-toolkit:base-18.04
+          tags: kevinedwards/devops-toolkit:ubuntu_base_1804
 
       # - name: ubuntu 20.04 builder
       #   if: steps.filter.outputs.a2004 == 'true'
