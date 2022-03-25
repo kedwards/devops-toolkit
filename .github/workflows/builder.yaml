@@ -42,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible/ubuntu18.04
-          push: false
+          push: true
           tags: kevinedwards/devops-toolkit:18
 
       - name: ubuntu 20.04 builder
@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible/ubuntu20.04
-          push: false
+          push: true
           tags: kevinedwards/devops-toolkit:20
 
       - name: Ubuntu 18.04 - Core builder
@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible-core/ubuntu18.04
-          push: false
+          push: true
           tags: kevinedwards/devops-toolkit:core18
 
       - name: ubuntu 20.04 Core builder
@@ -66,5 +66,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible-core/ubuntu20.04
-          push: false
+          push: true
           tags: kevinedwards/devops-toolkit:core20
