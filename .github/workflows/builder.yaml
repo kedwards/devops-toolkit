@@ -28,43 +28,43 @@ jobs:
         with:
           base: main
           filters: |
-            1804:
+            a1804:
               - 'src/ansible/ubuntu18.04/**'
-            2004:
+            a2004:
               - 'src/ansible/ubuntu20.04/**'
-            core-1804:
+            ac1804:
               - 'src/ansible-core/ubuntu18.04/**'
-            core-2004:
+            ac2004:
               - 'src/ansible-core/ubuntu20.04/**'
 
       - name: Ubuntu 18.04 builder
-        if: steps.filter.outputs.1804 == 'true'
+        if: steps.filter.outputs.a1804 == 'true'
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible/ubuntu18.04
           push: false
-          tags: kevinedwards/devops-toolkit:ubuntu18.04
+          tags: kevinedwards/devops-toolkit:18
 
       - name: ubuntu 20.04 builder
-        if: steps.filter.outputs.2004 == 'true'
+        if: steps.filter.outputs.a2004 == 'true'
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible/ubuntu20.04
           push: false
-          tags: kevinedwards/devops-toolkit:ubuntu20.04
+          tags: kevinedwards/devops-toolkit:20
 
       - name: Ubuntu 18.04 - Core builder
-        if: steps.filter.outputs.core-1804 == 'true'
+        if: steps.filter.outputs.ac1804 == 'true'
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible-core/ubuntu18.04
           push: false
-          tags: kevinedwards/devops-toolkit:ubuntu18.04c
+          tags: kevinedwards/devops-toolkit:core18
 
       - name: ubuntu 20.04 Core builder
-        if: steps.filter.outputs.core-2004 == 'true'
+        if: steps.filter.outputs.ac2004 == 'true'
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible-core/ubuntu20.04
           push: false
-          tags: kevinedwards/devops-toolkit:ubuntu20.04c
+          tags: kevinedwards/devops-toolkit:core20
