@@ -30,22 +30,22 @@ jobs:
         with:
           base: main
           filters: |
-            a1804:
+            ubuntu_base_1804:
               - 'src/ansible/ubuntu18.04/**'
-            a2004:
+            ubuntu_base_2004:
               - 'src/ansible/ubuntu20.04/**'
-            ac1804:
+            ubuntu_core_1804:
               - 'src/ansible-core/ubuntu18.04/**'
-            ac2004:
+            ubuntu_core_2004:
               - 'src/ansible-core/ubuntu20.04/**'
 
-      - name: Ubuntu 18.04 Test
-        id: test1804
-        if: steps.filter.outputs.a1804 == 'true'
+      - name: Ubuntu 18.04 Base Test
+        id: test_base_1804
+        if: steps.filter.outputs.ubuntu_base_1804 == 'true'
         run: |
-            echo ::set-output name=test1804::true
+            echo ::set-output name=ubuntu_base_1804::true
 
-  ubuntu1804:
+  ubuntu_base_1804:
     runs-on: ubuntu-latest
     needs: tester
     steps:
@@ -56,12 +56,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Ubuntu 18.04 Builder
-        # if: needs.tester.outputs.a1804 == 'true'
-        uses: docker/build-push-action@v2
+        if: needs.tester.outputs.ubuntu_base_1804 == 'true'
+        uses: docker/build-push-action@v2.8.0
         with:
-          context: ./src/ansible/ubuntu18.04
+          context:  "{{defaultContext}}:src/ansible/ubuntu18.04"
           push: true
-          tags: kevinedwards/devops-toolkit:18
+          tags: kevinedwards/devops-toolkit:base-18.04
 
       # - name: ubuntu 20.04 builder
       #   if: steps.filter.outputs.a2004 == 'true'
