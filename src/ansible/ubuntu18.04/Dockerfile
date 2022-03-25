@@ -36,7 +36,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
   rm -rf /var/lib/apt/lists/* && \
   DEBIAN_FRONTEND=noninteractive apt-get clean
 
-RUN python3 -m pip install --upgrade \
+RUN python -m pip install --upgrade \
   awscli \
   cffi \
   pip \
