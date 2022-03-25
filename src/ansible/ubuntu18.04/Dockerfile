@@ -28,6 +28,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     jq \
     make \
     openssh-client \
+    python3 \
     rsync \
     sshpass \
     wget \
