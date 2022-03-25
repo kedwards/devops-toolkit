@@ -63,7 +63,13 @@ RUN wget "https://github.com/99designs/aws-vault/releases/download/v6.6.0/aws-va
   chmod +x /usr/bin/yq && \
   mkdir /ansible && \
   mkdir -p /etc/ansible && \
-  echo 'localhost' > /etc/ansible/hosts
+  tee /etc/ansible/hosts.yml <<EOF > /dev/null
+---
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+EOF
 
 COPY ansible.cfg /etc/ansible/ansible.cfg
 
