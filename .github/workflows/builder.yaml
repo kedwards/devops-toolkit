@@ -55,11 +55,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Ubuntu 18.04 Builder
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
         run: |
+          cd src/ansible/ubuntu18.04
           docker build -t kevinedwards/devops-toolkit:ubuntu_base_1804 .
-          docker push kevinedwards/devops-toolkit:ubuntu_base_1804 .
+          docker push kevinedwards/devops-toolkit:ubuntu_base_1804
 
       # - name: ubuntu 20.04 builder
       #   if: steps.filter.outputs.a2004 == 'true'
