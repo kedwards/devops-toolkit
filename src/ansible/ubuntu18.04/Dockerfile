@@ -18,7 +18,7 @@ LABEL com.withreach.reach-devops.revision=$GIT_COMMIT \
   ca.kevinedwards.devops-toolkit.vcf-url="https://github.com/kevinedwards/devops-toolkit" \
   ca.kevinedwards.devops-toolkit.vendor="LivITy Ltd." \
   ca.kevinedwards.devops-toolkit.authors="Kevin Edwards <kedwards@kevinedwards.ca>" \
-  ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm -v $(pwd):/ansible  -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro kevinedwards/devops-toolkit:18"
+  ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm -v $(pwd):/ansible  -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro kevinedwards/devops-toolkit:base_18.04"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
