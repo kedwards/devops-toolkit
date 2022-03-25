@@ -28,10 +28,14 @@ jobs:
         with:
           base: main
           filters: |
+            1804:
+              - 'src/ansible/ubuntu18.04/**'
+            2004:
+              - 'src/ansible/ubuntu20.04/**'
             core-1804:
-              - 'src/*/ubuntu.1804/**'
+              - 'src/ansible-core/ubuntu18.04/**'
             core-2004:
-              - 'src/*/ubuntu.2004/**'
+              - 'src/ansible-core/ubuntu20.04/**'
 
       - name: Ubuntu 18.04 builder
         if: steps.filter.outputs.core1804 == 'true'
