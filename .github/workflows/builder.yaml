@@ -56,7 +56,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Ubuntu 18.04 Builder
-        if: needs.tester.outputs.a1804 == 'true'
+        # if: needs.tester.outputs.a1804 == 'true'
         uses: docker/build-push-action@v2
         with:
           context: ./src/ansible/ubuntu18.04
