@@ -1,0 +1,21 @@
+- name: Doorbell
+  hosts: "{{ target | default('all')}}"
+  gather_facts: no
+  vars:
+    ansible_connection: aws_ssm
+    ansible_aws_ssm_bucket_name: aws_required_bucket_name
+  pre_tasks:
+    # See "/var/cache/debconf/config.dat" for name of config item after changing manually
+    - name: aws-ssm ansible plugin fails if dash is the default shell
+      ansible.builtin.debconf:
+        name: dash/sh
+        question: dash/sh
+        value: false
+        vtype: boolean
+  roles:
+    - { role: roleName }
+  tasks:
+    - name: Ring the doorbell (Ping Host)
+      ping:
+  post_tasks:
+    - shell: echo 'goodbye'

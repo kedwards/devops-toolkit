@@ -1,0 +1,24 @@
+name: Build DevOps Toolkit Images
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - ".github/workflows/builder.yaml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - ".github/workflows/builder.yaml"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Image
+        uses: docker/build-push-action@v2
+        with:
+          path: ./src/ansible/ubuntu18.04
+          push: false
+          tags: kevinedwards/devops-toolkit:ubuntu18.04

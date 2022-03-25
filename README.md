@@ -1,6 +1,6 @@
 # DevOps Toolkit
 
-**Docker + Ansible + Mitogen + Ansible Runner + AWS SSM Manager**
+A DevOps toolkit, with things that run other things..
 
 Ansible and friends inside Docker for consistent running of ansible inside your local machine or CI/CD system.
 
@@ -10,6 +10,7 @@ These are the latest versions running within the containers:
 
 - Ansible: 2.12
 - Mitogen: 0.3.0
+- AWS Cli: aws-cli/1.22.77 Python/3.10.3 Linux/5.13.0-35-generic botocore/1.24.22
 - Ansible Runner: 1.4.9
 - AWS Systems Manager Plugin: Latest
 
@@ -70,21 +71,57 @@ ansible-playbook [core 2.12.2]
   libyaml = True
 ```
 
-
 ### Mount local file / directory, ssh key, and AWS profile
+
+You can attach your AWS credentials using environment variables, but this is not the most secure method since your credentials are shown in the process list, You can also have a file containing the environment variables and then set the environment variables to use using the docker --env-file option. :
 
 ```bash
  docker run -it --rm \
   -v $(pwd):/ansible \
-  ~/.aws:/root/.aws \
+  -e AWS_ACCESS_KEY_ID=xxxxxx \
+  -e AWS_SECRET_ACCESS_KEY=xxxxx \
+  -e AWS_DEFAULT_REGION=us-east-1 \
+  -v ~/.ssh/id_rsa:/root/id_rsa \
+  kevinedwards/devops-toolkit:latest \
+    ansible-playbook -i inventory/localhost.yml \
+    project/playbook.yml \
+    -K --ask-vault-pass --tags=<tags>
+```
+
+You can also attach your AWS Credentials file by mounting it in:
+
+```bash
+ docker run -it --rm \
+  -v $(pwd):/ansible \
+  -v ${HOME}/.aws/credentials:/root/.aws/credentials:ro \
   -v ~/.ssh/id_rsa:/root/id_rsa \
   kevinedwards/devops-toolkit \
-    ansible-playbook project/playbook.yml \
-      -e 'AWS_PROFILE=profile' \
-      -K \
-      --ask-vault-pass \
-      --tags=req
+    ansible-playbook -i inventory/localhost.yml \
+    project/playbook.yml \
+    -K --ask-vault-pass --tags=<tags> -e "aws_profile=<profile>"
 ```
+
+## Executing playbooks for AWS environments
+
+Production systems will usually contain encrypted variables files that contain credentials and sensitive information. The person running the production environment will need to have have access to the vault password.
+
+Executing the playbooks will be as follows:
+
+```
+AWS_PROFILE=maison \
+  docker run -it --rm \
+  -v $(pwd):/ansible \
+  -v $HOME/.aws/credentials:/root/.aws/credentials:ro \
+  -v ~/.ssh/id_rsa:/root/id_rsa \
+  kevinedwards/devops-toolkit:latest \
+    ansible-playbook -i inventory/localhost.yml \
+    project/playbook.yml \
+    -K --ask-vault-pass --tags=<tags> -e "aws_profile=<profile>"
+```
+
+You can also store the vault password inside an external file and then reference it using the ansible-playbook --vault-password-file=<file location> option. If you do this, it's important to set the file permission to something more secure like 0600 so that only you can view the file.
+
+One can also set the ANSIBLE_VAULT_PASSWORD_FILE environment variable to the location of the vault password file.
 
 ## Ansible runer
 
@@ -92,21 +129,20 @@ Ansible Runner is a tool that helps when interfacing with Ansible directly or as
 
 Find out more [here](https://ansible-runner.readthedocs.io/en/stable/)
 
-```bash
- docker run -it --rm \
-  -v $(pwd):/ansible \
-  ~/.aws:/root/.aws \
-  -v ~/.ssh/id_rsa:/root/id_rsa \
-  kevinedwards/devops-toolkit \
-    ansible-runner run /ansible -p playbook.yml
- ```
-
  ### Bash Alias
 
-You can create aliases to ease your typing burden when using:
+You can create aliases to ease your typing burden when using DevOps Toolkit:
 
 ```bash
-alias docker-ansible-cli='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible kevinedwards/devops-toolkit bash'
-
-alias docker-ansible-cmd='docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/.ssh/id_rsa --workdir=/ansible kevinedwards/devops-toolkit '
+  alias dt='docker run -it --rm \
+  -v $(pwd):/ansible  \
+  -v $HOME/.gitconfig:/root/.gitconfig:ro \
+  -v $HOME/.git-credentials:/root/.git-credentials \
+  -v $HOME/.aws/credentials:/root/.aws/credentials:ro \
+  -v $HOME/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
+  -v $(readlink -f $SSH_AUTH_SOCK):/ssh-agent \
+  -e SSH_AUTH_SOCK=/ssh-agent \
+  -w /ansible \
+  kevinedwards/devops-toolkit:latest'
 ```
+
