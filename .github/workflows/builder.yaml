@@ -14,8 +14,10 @@ on:
       - "src/**"
       - ".github/workflows/builder.yaml"
 jobs:
-  build:
+  tester:
     runs-on: ubuntu-latest
+    outputs:
+      a1804: ${{ steps.test1804.outputs.test1804}}
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
@@ -37,34 +39,44 @@ jobs:
             ac2004:
               - 'src/ansible-core/ubuntu20.04/**'
 
-      - name: Ubuntu 18.04 builder
+      - name: Ubuntu 18.04 Test
+        id: test1804
         if: steps.filter.outputs.a1804 == 'true'
+        run: |
+            echo ::set-output name=test1804::true
+
+  ubuntu1804:
+    runs-on: ubuntu-latest
+    needs: tester
+    steps:
+      - name: Ubuntu 18.04 Builder
+        if: needs.tester.outputs.a1804 == 'true'
         uses: docker/build-push-action@v2
         with:
           path: ./src/ansible/ubuntu18.04
           push: true
           tags: kevinedwards/devops-toolkit:18
 
-      - name: ubuntu 20.04 builder
-        if: steps.filter.outputs.a2004 == 'true'
-        uses: docker/build-push-action@v2
-        with:
-          path: ./src/ansible/ubuntu20.04
-          push: true
-          tags: kevinedwards/devops-toolkit:20
+      # - name: ubuntu 20.04 builder
+      #   if: steps.filter.outputs.a2004 == 'true'
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     path: ./src/ansible/ubuntu20.04
+      #     push: true
+      #     tags: kevinedwards/devops-toolkit:20
 
-      - name: Ubuntu 18.04 - Core builder
-        if: steps.filter.outputs.ac1804 == 'true'
-        uses: docker/build-push-action@v2
-        with:
-          path: ./src/ansible-core/ubuntu18.04
-          push: true
-          tags: kevinedwards/devops-toolkit:core18
+      # - name: Ubuntu 18.04 - Core builder
+      #   if: steps.filter.outputs.ac1804 == 'true'
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     path: ./src/ansible-core/ubuntu18.04
+      #     push: true
+      #     tags: kevinedwards/devops-toolkit:core18
 
-      - name: ubuntu 20.04 Core builder
-        if: steps.filter.outputs.ac2004 == 'true'
-        uses: docker/build-push-action@v2
-        with:
-          path: ./src/ansible-core/ubuntu20.04
-          push: true
-          tags: kevinedwards/devops-toolkit:core20
+      # - name: ubuntu 20.04 Core builder
+      #   if: steps.filter.outputs.ac2004 == 'true'
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     path: ./src/ansible-core/ubuntu20.04
+      #     push: true
+      #     tags: kevinedwards/devops-toolkit:core20
