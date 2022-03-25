@@ -16,9 +16,50 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Image
-        uses: docker/build-push-action@v2
+      - name: checkout repository
+        uses: actions/checkout@v2
         with:
-          path: ./src/ansible/ubuntu18.04
-          push: false
-          tags: kevinedwards/devops-toolkit:ubuntu18.04
+          fetch-depth: 0
+      - name: check filters
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: main
+          filters: |
+            ubuntu18.04:
+              - 'src/*/ubuntu.1804/**'
+      - name: backend tests
+        if: steps.filter.outputs.backend == 'true'
+        runs-on: ubuntu-latest
+        steps:
+          - name: Build Image
+            uses: docker/build-push-action@v2
+            with:
+              path: ./src/ansible/ubuntu18.04
+              push: false
+              tags: kevinedwards/devops-toolkit:ubuntu18.04
+
+  #   name: check modified images
+  #   runs-on: ubuntu-latest
+  #     - name: check modified files
+  #       id: check_files
+  #       run: |
+  #         git diff --name-status main > files.txt
+  #         while IFS= read -r file
+  #         do
+  #           if [[ $file = src/* ]]; then
+  #             echo "::set-output name=run_$(basename $(realpath "${file%/*}"))::true"
+  #           fi
+  #         done < files.txt
+  # build:
+  #   name: build images
+  #   needs: check_image
+  #   if: needs.check_image.outputs.run_ubuntu18.04 == 'true'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Build Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         path: ./src/ansible/ubuntu18.04
+  #         push: false
+  #         tags: kevinedwards/devops-toolkit:ubuntu18.04
