@@ -65,6 +65,8 @@ jobs:
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
         run: |
           echo $(pwd)
+          cd src
+          echo $(pwd)
           ls -laF
           # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804 .
           # docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804
