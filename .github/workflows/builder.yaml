@@ -58,11 +58,11 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v3.0.0
 
-
       - name: Ubuntu 18.04 Builder
         uses: docker/build-push-action@v2.8.0
         with:
           context: src/ansible/ubuntu18.04
+          push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ansible18.04
         # working-directory: src/ansible/ubuntu18.04
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
