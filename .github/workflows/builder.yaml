@@ -64,11 +64,11 @@ jobs:
         # working-directory: src/ansible/ubuntu18.04
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
         run: |
-          cd src/ansible
+          cd src/ansible/ubunut18.04
           echo $(pwd)
           ls -laF
-          # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804 .
-          # docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804 .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804
 
       # - name: ubuntu 20.04 builder
       #   if: steps.filter.outputs.a2004 == 'true'
