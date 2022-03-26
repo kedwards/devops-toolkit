@@ -66,8 +66,6 @@ jobs:
           context: "https://github.com/${{ github.repository }}.git#${{ github.sha }}:src/ansible/ubuntu18.04"
         # working-directory: src/ansible/ubuntu18.04
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
-        run: |
-          make build
 
       # docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:latest
 
