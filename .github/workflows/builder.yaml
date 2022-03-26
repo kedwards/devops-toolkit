@@ -64,7 +64,6 @@ jobs:
         working-directory: src/ansible/ubuntu18.04
         # if: needs.tester.outputs.ubuntu_base_1804 == 'true'
         run: |
-          cd src/ansible/ubuntu18.04
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804 .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-toolkit:ubuntu_base_1804
 
