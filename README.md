@@ -32,11 +32,29 @@ and then configuring your own ansible.cfg like:
 
 
 ```bash
-echo "
+tee ansible.cfg <<EOF > /dev/null
 [defaults]
-strategy_plugins = $(docker run --rm -it kevinedwards/devops-toolkit /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
+ansible_managed = Ansible managed: {file} modified on %Y-%m-%d %H:%M:%S by {uid} on {host}
+inventory = inventory/hosts.yml
+interpreter_python = auto
+forks = 50
+
+strategy_plugins = $(docker run --rm kevinedwards/devops-toolkit:base_18.04 /bin/sh -c 'find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1')
 strategy = mitogen_linear
-"
+
+gathering = smart
+fact_caching = jsonfile
+fact_caching_connection = cache/
+fact_caching_timeout = 86400
+
+[inventory]
+enable_plugins = yaml
+
+[ssh_connection]
+pipelining = True
+ssh_args = -o ControlMaster=auto -o ControlPersist=30m -o StrictHostKeyChecking=no -o ForwardAgent=yes
+control_path = /tmp/ansible-ssh-%%h-%%p-%%r
+EOF
 ```
 
 Your ansible.cfg should have a stanza as shown below.

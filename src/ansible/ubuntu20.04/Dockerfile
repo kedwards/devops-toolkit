@@ -9,7 +9,7 @@ ENV YQ_VERSION=${YQ_VERSION_ARG}
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-LABEL com.withreach.reach-devops.revision=$GIT_COMMIT \
+LABEL ca.kevinedwards.devops-toolkit.revision=$GIT_COMMIT \
   ca.kevinedwards.devops-toolkit.build-date=$BUILD_DATE \
   ca.kevinedwards.devops-toolkit.vcs-ref=$GIT_COMMIT \
   ca.kevinedwards.devops-toolkit.version=$VERSION \
@@ -28,6 +28,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     jq \
     make \
     openssh-client \
+    python3 \
     rsync \
     sshpass \
     wget \
