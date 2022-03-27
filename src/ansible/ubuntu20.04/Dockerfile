@@ -20,7 +20,7 @@ LABEL ca.kevinedwards.devops-toolkit.revision=$GIT_COMMIT \
   ca.kevinedwards.devops-toolkit.vcf-url="https://github.com/kevinedwards/devops-toolkit" \
   ca.kevinedwards.devops-toolkit.vendor="LivITy Ltd." \
   ca.kevinedwards.devops-toolkit.authors="Kevin Edwards <kedwards@kevinedwards.ca>" \
-  ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm -v $(pwd):/ansible  -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro kevinedwards/devops-toolkit:ubuntu_base_18.04"
+  ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm -v $(pwd):/ansible  -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro kevinedwards/devops-toolkit:ubuntu_20.04"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
   apt-get install --no-install-recommends -y \
