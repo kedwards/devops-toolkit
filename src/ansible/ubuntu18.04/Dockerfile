@@ -23,7 +23,7 @@ LABEL ca.kevinedwards.devops-toolkit.revision=$GIT_COMMIT \
   ca.kevinedwards.devops-toolkit.docker.cmd="docker run -it --rm -v $(pwd):/ansible  -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro kevinedwards/devops-toolkit:ubuntu_18.04"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-  apt-get install --no-install-recommends -y \
+  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
   curl git gnupg2 jq less libffi-dev libhdf5-dev libssl-dev make openssh-client patch rsync software-properties-common sshpass wget unzip zip && \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python3-pip && \
