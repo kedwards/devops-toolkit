@@ -57,7 +57,7 @@ jobs:
 
       - name: Test
         run: |
-          echo ${{ needs.tester.outputs }}
+          echo ${{ needs.tester.outputs.ubuntu_1804 }}
 
       # - name: Ubuntu 18.04 Builder
       #   uses: docker/build-push-action@v2.8.0
