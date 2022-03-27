@@ -43,6 +43,7 @@ jobs:
         id: test_ubuntu_base_1804
         if: steps.filter.outputs.ubuntu_base_1804 == 'true'
         run: |
+            echo ${{ steps.filter.outputs.ubuntu_base_1804 }}
             echo ::set-output name=changed::true
 
   ubuntu_base_1804:
@@ -56,8 +57,7 @@ jobs:
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Test
-        run: |
-          echo ${{ needs.tester.outputs.ubuntu_1804 }}
+        run: echo ${{ needs.tester.outputs.ubuntu_1804 }}
 
       # - name: Ubuntu 18.04 Builder
       #   uses: docker/build-push-action@v2.8.0
