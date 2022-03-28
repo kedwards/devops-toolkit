@@ -45,6 +45,7 @@ RUN ansible-galaxy collection install community.general && \
   chmod +x /usr/local/bin/yq && \
   mkdir /ansible && \
   mkdir -p /etc/ansible && \
+  ansible-galaxy collection install community.aws && \
   echo 'localhost' > /etc/ansible/hosts
 
 WORKDIR /ansible
